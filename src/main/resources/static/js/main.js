@@ -10,9 +10,14 @@ var multipleFileUploadInput = document.querySelector('#multipleFileUploadInput')
 var multipleFileUploadError = document.querySelector('#multipleFileUploadError');
 var multipleFileUploadSuccess = document.querySelector('#multipleFileUploadSuccess');
 
+var responseStatus;
+var message;
+
+
 function uploadSingleFile(file) {
     var formData = new FormData();
     formData.append("file", file);
+    formData.append("message", message);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/uploadFile");
@@ -36,7 +41,7 @@ function uploadSingleFile(file) {
 function uploadMultipleFiles(files) {
     var formData = new FormData();
     for(var index = 0; index < files.length; index++) {
-        formData.append("files", files[index]);
+        formData.append("files", files[index], message);
     }
 
     var xhr = new XMLHttpRequest();
@@ -83,3 +88,7 @@ multipleUploadForm.addEventListener('submit', function(event){
     event.preventDefault();
 }, true);
 
+
+function sayhello (message) {
+    this.message = message;
+    }

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +29,10 @@ public class FileController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("message") String message ) {
         String fileName = fileStorageService.storeFile(file);
+        fileName = Paths.get(fileName).getFileName().toString();
+        logger.info(message);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -41,10 +44,12 @@ public class FileController {
     }
 
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files ) {
+        String message = "";
+
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file))
+                .map(file -> uploadFile(file, message))
                 .collect(Collectors.toList());
     }
 
