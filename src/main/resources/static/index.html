@@ -3,15 +3,37 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=11">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-        <title>Spring Boot File Upload / Download Rest API Example</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <!--    <title>Spring Boot File Upload / Download Rest API Example</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/main.css" />-->
     </head>
     <body>
         <noscript>
             <h2>Sorry! Your browser doesn't support Javascript</h2>
         </noscript>
-        <div class="upload-container">
+
+        <div id="app">
+            <v-app>
+                <v-content>
+                    <v-container>
+                        <v-file-input
+                                v-model="file"
+                                label="Wybierz plik"
+                                accept="image/*"
+                        ></v-file-input>
+                        <v-btn color="primary" @click="uploadSingleFile(file)">Wyślij</v-btn>
+<!--                        <p>
+                            Hello world: {{display}}
+                        </p>-->
+                    </v-container>
+                </v-content>
+            </v-app>
+        </div>
+
+<!--        <div class="upload-container">
             <div class="upload-header">
                 <h2>Spring Boot File Upload / Download Rest API Example</h2>
             </div>
@@ -44,5 +66,50 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    -->
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="/js/main.js" ></script>
+        <script>
+            new Vue({
+                el: '#app',
+                vuetify: new Vuetify(),
+                data: () => ({
+                    file: null,
+                    imageUrl: null,
+                    display: 'cos tam ',
+                    file: null,
+                }),
+                methods: {
+                    onUpload() {
+                        console.log(this.file)
+                    },
+                    uploadSingleFile(file) {
+                        var formData = new FormData();
+                        formData.append("file", file);
+                        formData.append("message", message);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/uploadFile");
+
+                        xhr.onload = function() {
+                            console.log(xhr.responseText);
+                            var response = JSON.parse(xhr.responseText);
+                            if(xhr.status == 200) {
+                                singleFileUploadError.style.display = "none";
+                                singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='" + response.fileDownloadUri + "' target='_blank'>" + response.fileDownloadUri + "</a></p>";
+                                singleFileUploadSuccess.style.display = "block";
+                            } else {
+                                singleFileUploadSuccess.style.display = "none";
+                                singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
+                            }
+                        }
+
+                        xhr.send(formData);
+                    }
+                }
+            })
+        </script>
     </body>
 </html>
