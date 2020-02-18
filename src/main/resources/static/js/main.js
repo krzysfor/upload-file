@@ -13,6 +13,45 @@ var multipleFileUploadSuccess = document.querySelector('#multipleFileUploadSucce
 var responseStatus;
 var message;
 
+new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+        imageUrl: null,
+        display: 'cos tam ',
+        file: null,
+    }),
+    methods: {
+        onUpload() {
+            console.log(this.file)
+        },
+        uploadSingleFile(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("message", message);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/uploadFile");
+
+            xhr.onload = function() {
+                console.log(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
+                if(xhr.status == 200) {
+                    singleFileUploadError.style.display = "none";
+                    singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='" + response.fileDownloadUri + "' target='_blank'>" + response.fileDownloadUri + "</a></p>";
+                    singleFileUploadSuccess.style.display = "block";
+                } else {
+                    singleFileUploadSuccess.style.display = "none";
+                    singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
+                }
+            }
+
+            xhr.send(formData);
+        }
+    }
+})
+
+/*
 
 function uploadSingleFile(file) {
     var formData = new FormData();
@@ -92,3 +131,4 @@ multipleUploadForm.addEventListener('submit', function(event){
 function sayhello (message) {
     this.message = message;
     }
+*/
