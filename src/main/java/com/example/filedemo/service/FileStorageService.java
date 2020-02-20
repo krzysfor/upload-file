@@ -38,13 +38,14 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, String uuidFileName) {
     	
     	logger.info("storeFile");
     	
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        fileName = Paths.get(fileName).getFileName().toString();
+//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//        fileName = Paths.get(fileName).getFileName().toString();
+        String fileName = uuidFileName;
         
         try {
             // Check if the file's name contains invalid characters

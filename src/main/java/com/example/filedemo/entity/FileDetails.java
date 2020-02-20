@@ -8,35 +8,48 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class UploadedFile {
+@Table(name = "uploaded_files")
+public class FileDetails {
 
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private int id;
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(updatable = false, nullable = false)
+	private UUID uuid;
+	
 	@Column(length = 50, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private FileTypes type;
-	@Column(nullable = false)
-	private UUID fileUuid;
+		
 	@Column(nullable = false)
 	private UUID originDatabaseUuid;
+	
 	@Column(nullable = false)
 	private int originDatabaseId;
+	
 	private LocalDateTime dateOfUpload;
+	
 	@Column(length = 255)
 	private String uploaderName;
+	
 	@Column(length = 255, nullable = false)
 	private String fileName;
-	
-	public UploadedFile() {
-		
+
+	public FileDetails() {
+
 	}
-	
+
 }
