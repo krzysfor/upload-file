@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,8 +41,8 @@ public class FileController {
     @Autowired
     private FileRepository fileRepository;
 
-    @GetMapping("/file/{uuid}")
-    public ResponseEntity<FileDetails> getFileByUUID(@PathVariable(value = "uuid") UUID fileUUID) throws ResourceNotFoundException {
+    @GetMapping("/file")
+    public ResponseEntity<FileDetails> getFileByUUID(@RequestParam("uuid") UUID fileUUID) throws ResourceNotFoundException {
     	FileDetails file = fileRepository.findById(fileUUID)
     			.orElseThrow( () -> new ResourceNotFoundException("Nie znaleziono pliku o podanym UUID :: " + fileUUID.toString()));
     	return ResponseEntity.ok().body(file);
