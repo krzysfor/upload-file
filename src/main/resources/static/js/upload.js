@@ -4,17 +4,17 @@ var singleUploadForm = document.querySelector('#singleUploadForm');
 var singleFileUploadInput = document.querySelector('#singleFileUploadInput');
 var singleFileUploadError = document.querySelector('#singleFileUploadError');
 var singleFileUploadSuccess = document.querySelector('#singleFileUploadSuccess');
-var dbGuid;
+var fileDetails;
 var responseStatus;
 var responseUri;
 
 function uploadSingleFile(file) {
 	var formData = new FormData();
 	formData.append("file", file);
-	formData.append("dbGuid", dbGuid);
+	formData.append("fileDetails",JSON.stringify(fileDetails));
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "/uploadFile");
+	xhr.open("POST", "/api/v1/file");
 
 	xhr.onload = function() {
 		console.log(xhr.responseText);
@@ -22,13 +22,14 @@ function uploadSingleFile(file) {
 		responseStatus = xhr.status 
 		if (xhr.status == 200) {
 			singleFileUploadError.style.display = "none";
-			singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='"
-					+ response.fileDownloadUri
-					+ "' target='_blank'>"
-					+ response.fileDownloadUri + "</a></p>";
-			singleFileUploadSuccess.style.display = "block";
+			singleFileUploadSuccess.style.display = "none";
+			//singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='"
+			//		+ response.fileDownloadUri
+			//		+ "' target='_blank'>"
+			//		+ response.fileDownloadUri + "</a></p>";
+			//singleFileUploadSuccess.style.display = "block";
 			responseUri = response.fileName;
-			alert(responseUri);
+			//alert(responseUri);
 		} else {
 			singleFileUploadSuccess.style.display = "none";
 			singleFileUploadError.innerHTML = (response && response.message)
@@ -39,8 +40,18 @@ function uploadSingleFile(file) {
 	xhr.send(formData);
 }
 
-function setDbGuid(dbGuid){
-	this.dbGuid = dbGuid;
+function FileDetails(type, originDatabaseUuid, originLinkedDocId, dateOfUpload, uploaderName){
+		this.type = type;
+		this.originDatabaseUuid = originDatabaseUuid;
+		this.originLinkedDocId = originLinkedDocId;
+		this.dateOfUpload = dateOfUpload;
+		this.uploaderName = uploaderName;
+	}
+
+
+function createFileDetails(type, originDatabaseUuid, originLinkedDocId, dateOfUpload, uploaderName){
+	this.fileDetails = new FileDetails(type, originDatabaseUuid, originLinkedDocId, dateOfUpload, uploaderName);
+	//alert(JSON.stringify(fileDetails));
 }
 
 function test(){

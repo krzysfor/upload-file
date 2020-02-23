@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "uploaded_files")
+//@NamedQuery(name="FileDetails.findByLinkedDocId", query = "SELECT f FROM FileDetails f WHERE f.originLinkedDocId = :linkedDocId")
 public class FileDetails {
 
 	//@Id
@@ -38,7 +40,7 @@ public class FileDetails {
 	private UUID originDatabaseUuid;
 	
 	@Column(nullable = false)
-	private int originDatabaseId;
+	private int originLinkedDocId;
 	
 	private LocalDateTime dateOfUpload;
 	

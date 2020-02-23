@@ -2,6 +2,7 @@ package com.example.filedemo.controller;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,8 +45,21 @@ public class FileController {
     @GetMapping("/file")
     public ResponseEntity<FileDetails> getFileByUUID(@RequestParam("uuid") UUID fileUUID) throws ResourceNotFoundException {
     	FileDetails file = fileRepository.findById(fileUUID)
-    			.orElseThrow( () -> new ResourceNotFoundException("Nie znaleziono pliku o podanym UUID :: " + fileUUID.toString()));
+    			.orElseThrow( () -> new ResourceNotFoundException("Nie znaleziono pliku o podanym UUID : " + fileUUID.toString()));
     	return ResponseEntity.ok().body(file);
+    }
+    
+    @GetMapping("/files")
+    public ResponseEntity<List<FileDetails>> getFileDetailsByLinkedDocId(@RequestParam("linkedDocId") int linkedDocId) throws ResourceNotFoundException {
+    	
+    	logger.info("/files/" + String.valueOf(linkedDocId));
+    	List<FileDetails> files = fileRepository.findByLinkedDocId(linkedDocId);
+    	
+    	if (files.isEmpty()) {
+    		throw new ResourceNotFoundException("Nie znaleziono plików do podanego id : " + String.valueOf(linkedDocId));
+    	}
+    			
+    	return ResponseEntity.ok().body(files);
     }
 
     @PostMapping("/file")
@@ -93,8 +107,8 @@ public class FileController {
 	 * .collect(Collectors.toList()); }
 	 */
 
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/downloadFile/{fileName:.+}") 
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request)  throws ResourceNotFoundException{
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
@@ -110,10 +124,14 @@ public class FileController {
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
+        
+        UUID fileUuid = UUID.fromString(fileName);
+        FileDetails file = fileRepository.findById(fileUuid)
+    			.orElseThrow( () -> new ResourceNotFoundException("Nie znaleziono pliku o podanym UUID : " + fileUuid.toString()));
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
                 .body(resource);
     }
 
