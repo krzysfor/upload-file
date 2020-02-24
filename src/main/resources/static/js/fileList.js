@@ -1,11 +1,12 @@
 'use strict';
 
-function getList(idDoc) {
+function getList(docType, idDoc) {
 	var request = new XMLHttpRequest();
-	alert(idDoc);
+	//alert(docType);
+	//alert(idDoc);
 	//request.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
 	
-	request.open("GET", "http://localhost:8081/api/v1/files?linkedDocId=" + idDoc);
+	request.open("GET", "http://localhost:8081/api/v1/files?type=" + docType + "&" + "linkedDocId=" + idDoc);
 	//request.setRequestHeader('Cache-Control', 'no-cache');
 	request.setRequestHeader("Cache-Control", "no-cache, no-store");
 	request.setRequestHeader('pragma', 'no-cache');
@@ -13,7 +14,7 @@ function getList(idDoc) {
 	
 	request.onload = function () {
 		var response = JSON.parse(request.responseText);
-		alert(response.length);
+		//alert(response.length);
 		
 		var api = document.getElementById('root');
 		

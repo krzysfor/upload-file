@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.filedemo.entity.FileDetails;
+import com.example.filedemo.entity.FileTypes;
 import com.example.filedemo.exception.ResourceNotFoundException;
 import com.example.filedemo.payload.UploadFileResponse;
 import com.example.filedemo.repository.FileRepository;
@@ -50,10 +51,11 @@ public class FileController {
     }
     
     @GetMapping("/files")
-    public ResponseEntity<List<FileDetails>> getFileDetailsByLinkedDocId(@RequestParam("linkedDocId") int linkedDocId) throws ResourceNotFoundException {
+    public ResponseEntity<List<FileDetails>> getFileDetailsByLinkedDocIdAndType(@RequestParam("type") FileTypes type, @RequestParam("linkedDocId") int linkedDocId) throws ResourceNotFoundException {
     	
+    	logger.info("/files/" + type.toString());
     	logger.info("/files/" + String.valueOf(linkedDocId));
-    	List<FileDetails> files = fileRepository.findByLinkedDocId(linkedDocId);
+    	List<FileDetails> files = fileRepository.findByLinkedDocTypeAndId(type, linkedDocId);
     	
     	if (files.isEmpty()) {
     		throw new ResourceNotFoundException("Nie znaleziono plików do podanego id : " + String.valueOf(linkedDocId));
