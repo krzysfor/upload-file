@@ -49,6 +49,9 @@ public class FileDetails {
 	
 	@Column(length = 255, nullable = false)
 	private String fileName;
+	
+	@Column(nullable = false)
+	private long fileSize;
 
 	public FileDetails() {
 

@@ -45,7 +45,9 @@ function getList(docType, idDoc) {
 			aname.textContent = file.fileName;
 			
 			var pname = document.createElement('p');
-			pname.textContent = file.uploaderName;
+			var oriSize = Number(file.fileSize);
+			var sizeInKB = oriSize / 1024;
+			pname.textContent = sizeInKB.toFixed(2) + " kB";
 			
 			container.appendChild(card);
 			card.appendChild(pid);

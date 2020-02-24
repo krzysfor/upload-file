@@ -72,6 +72,7 @@ public class FileController {
     	
     	FileDetails file = fileDTO.getFileDetails();
     	file.setFileName(fileName);
+    	file.setFileSize(fileDTO.getFile().getSize());
         file = fileRepository.save(file);
         logger.info(file.getUuid().toString());
     	
