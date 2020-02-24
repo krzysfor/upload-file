@@ -6,7 +6,36 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="cache-control" content="no-cache">
         <title>Spring Boot File Upload / Download Rest API Example</title>
-        <link rel="stylesheet" href="/css/main.css" />
+        <!-- link rel="stylesheet" href="/css/main.css" /-->
+        
+        <style>
+        body {
+        	background-color: #f0f0f0;
+        }
+        th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+        table {
+        	width: 100%;
+        }
+        th.lp {
+        	width: 30px;
+        }
+        th.size {
+        	width: 140px
+        }
+    </style>
+        
     </head>
     <body>
         <noscript>
@@ -16,6 +45,9 @@
         <div id="root">
         
         </div>
+        
+        <p id="showData"></p>
+        
         <script src="/js/fileList.js" ></script>
         
     </body>
